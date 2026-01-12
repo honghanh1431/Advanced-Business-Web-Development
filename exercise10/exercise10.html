@@ -1,0 +1,65 @@
+<div class="lunar-converter">
+  <h2>Chuyển đổi Dương lịch → Âm lịch</h2>
+
+  <div class="input-group">
+    <div class="select-wrapper">
+      <label>Ngày</label>
+      <select class="form-select" [(ngModel)]="day" name="day">
+        <option *ngFor="let d of days" [value]="d">{{d}}</option>
+      </select>
+    </div>
+
+    <div class="select-wrapper">
+      <label>Tháng</label>
+      <select class="form-select" [(ngModel)]="month" name="month">
+        <option *ngFor="let m of months" [value]="m">{{m}}</option>
+      </select>
+    </div>
+
+    <div class="select-wrapper">
+      <label>Năm</label>
+      <select class="form-select" [(ngModel)]="year" name="year">
+        <option *ngFor="let y of years" [value]="y">{{y}}</option>
+      </select>
+    </div>
+  </div>
+
+  <button class="convert-btn" (click)="convert()">
+    <span></span> Chuyển đổi
+  </button>
+
+  <hr>
+
+  <div class="result-section" *ngIf="result">
+    <h3>Kết quả</h3>
+    
+    <div class="result-grid">
+      <div class="result-item">
+        <span class="label">Thứ trong tuần:</span>
+        <span class="value">{{ result.weekday }}</span>
+      </div>
+
+      <div class="result-item highlight">
+        <span class="label">Ngày tháng năm âm:</span>
+        <span class="value lunar-date">
+          {{ result.lunarDay }}/{{ result.lunarMonth }}/{{ result.lunarYear }}
+        </span>
+      </div>
+
+      <div class="result-item">
+        <span class="label">Năm:</span>
+        <span class="value canchi">{{ result.yearCanChi }}</span>
+      </div>
+
+      <div class="result-item">
+        <span class="label">Tháng:</span>
+        <span class="value canchi">{{ result.monthCanChi }}</span>
+      </div>
+
+      <div class="result-item">
+        <span class="label">Ngày:</span>
+        <span class="value canchi">{{ result.dayCanChi }}</span>
+      </div>
+    </div>
+  </div>
+</div>
