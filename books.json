@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "createdAt": "2026-02-09T15:26:25.412Z",
+    "title": "dàv",
+    "price": 33,
+    "description": "sacdvf",
+    "coverImage": "ưqed",
+    "updatedAt": "2026-02-09T15:26:25.412Z",
+    "quantity": 4,
+    "categoryId": 4,
+    "publisherId": 4
+  },
+  {
+    "id": 2,
+    "createdAt": "2026-02-09T15:27:04.597Z",
+    "title": "sdvf",
+    "price": 4,
+    "description": "àd",
+    "coverImage": "àdd",
+    "updatedAt": "2026-02-09T15:27:04.597Z",
+    "quantity": 4,
+    "categoryId": 4,
+    "publisherId": 4
+  }
+]
