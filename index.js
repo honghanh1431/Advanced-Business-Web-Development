@@ -29,6 +29,7 @@ client = new MongoClient("mongodb://127.0.0.1:27017");
 client.connect();
 database = client.db("FashionData");
 fashionCollection = database.collection("Fashion");
+userCollection = database.collection("User");
 
 app.get("/fashions",cors(),async (req,res)=>{
     const result = await fashionCollection.find({}).toArray();
@@ -59,7 +60,7 @@ app.get("/create-cookie",cors(),(req,res)=>{
     res.cookie("account",account)
     res.send("cookies are created")
     //Expires after 360000 ms from the time it is set.
-    res.cookie("infor_limit1", 'I am limited Cookie - way 1', {expire: 360000 +
+    res.cookie("infor_limit1", 'I am limited Cookie - way 1', {expires: 360000 +
     Date.now()});
     res.cookie("infor_limit2", 'I am limited Cookie - way 2', {maxAge: 360000});
 })
@@ -74,14 +75,7 @@ app.get("/read-cookie",cors(),(req,res)=>{
     infor+="account.username = "+account.username+"<br/>"
     infor+="account.password = "+account.password+"<br/>"
     res.send(infor)
-})
 
-app.get("/clear-cookie",cors(),(req,res)=>{
-    res.clearCookie("account")
-    res.send("[account] Cookie is removed")
-})
-
-app.get("/read-cookie",cors(),(req,res)=>{
     //cookie is stored in client, so we use req
     username=req.cookies.username
     password=req.cookies.password
@@ -94,4 +88,48 @@ app.get("/read-cookie",cors(),(req,res)=>{
         infor+="account.password = "+account.password+"<br/>"
     }
     res.send(infor)
+})
+
+app.get("/clear-cookie",cors(),(req,res)=>{
+    res.clearCookie("account")
+    res.send("[account] Cookie is removed")
+})
+
+app.post("/login",cors(),async (req,res)=>{
+
+    const username = req.body.username
+    const password = req.body.password
+
+    const user = await userCollection.findOne({
+        username: username,
+        password: password
+    })
+
+    if(user){
+        res.cookie("username",username)
+        res.cookie("password",password)
+
+        res.send({
+            message:"Login successful",
+            user:user
+        })
+    }
+    else{
+        res.status(401).send({
+            message:"Login failed"
+        })
+    }
+
+})
+
+app.get("/get-login-cookie",cors(),(req,res)=>{
+
+    const username=req.cookies.username
+    const password=req.cookies.password
+
+    res.send({
+        username:username,
+        password:password
+    })
+
 })
