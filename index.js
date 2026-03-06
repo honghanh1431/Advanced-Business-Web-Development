@@ -1,195 +1,97 @@
 const express = require('express');
-const fileUpload = require('express-fileupload');
-const fs = require('fs');
-const path = require('path');
 const app = express();
-const port = 4100;
-const morgan = require('morgan');
-const cors = require('cors');
-const bodyParser = require('body-parser');
+const port = 3002;
 
-const DATA_DIR = path.join(__dirname, 'data');
-const BOOKS_PATH = path.join(DATA_DIR, 'books.json');
-const UPLOAD_DIR = path.join(__dirname, 'upload');
+const morgan=require("morgan")
+app.use(morgan("combined"))
 
-const ensureDataFile = () => {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
-  if (!fs.existsSync(BOOKS_PATH)) {
-    const seed = [
-      {
-        id: 1,
-        title: 'Giáo trình Tin học cơ bản',
-        price: 260000,
-        description: 'Nội dung của cuốn: Tin Học Cơ Bản Windows XP gồm có 7 chương...',
-        coverImage: 'THCB.jpg',
-        updatedAt: '2014-10-25T00:00:00.000Z',
-        quantity: 120,
-        categoryId: 7,
-        publisherId: 1,
-        createdAt: '2014-10-25T00:00:00.000Z'
-      }
-    ];
-    fs.writeFileSync(BOOKS_PATH, JSON.stringify(seed, null, 2));
-  }
-  if (!fs.existsSync(UPLOAD_DIR)) {
-    fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-  }
-};
+const bodyParser=require("body-parser")
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
-ensureDataFile();
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb' }));
+app.use(express.json());
 
-const readBooks = () => {
-  const raw = fs.readFileSync(BOOKS_PATH, 'utf8');
-  try {
-    return JSON.parse(raw);
-  } catch (err) {
-    return [];
-  }
-};
+const cors=require("cors");
+app.use(cors())
 
-const writeBooks = (books) => {
-  fs.writeFileSync(BOOKS_PATH, JSON.stringify(books, null, 2));
-};
+app.listen(port,()=>{
+    console.log(`My Server listening on port ${port}`)
+})
 
-const toNumber = (value, fallback = 0) => {
-  const n = Number(value);
-  return Number.isFinite(n) ? n : fallback;
-};
+app.get("/",(req,res)=>{
+    res.send("This Web server is processed for MongoDB")
+})
 
-const normalizeBookPayload = (payload, existing = null) => {
-  const now = new Date().toISOString();
-  const base = existing || {
-    createdAt: now,
-  };
+const { MongoClient, ObjectId } = require('mongodb');
+client = new MongoClient("mongodb://127.0.0.1:27017");
+client.connect();
+database = client.db("FashionData");
+fashionCollection = database.collection("Fashion");
 
-  return {
-    ...base,
-    title: payload.title?.trim() || base.title || '',
-    price: toNumber(payload.price, base.price || 0),
-    description: payload.description?.trim() || base.description || '',
-    coverImage: payload.coverImage || base.coverImage || '',
-    updatedAt: now,
-    quantity: toNumber(payload.quantity, base.quantity || 0),
-    categoryId: toNumber(payload.categoryId, base.categoryId || 0),
-    publisherId: toNumber(payload.publisherId, base.publisherId || 0)
-  };
-};
+app.get("/fashions",cors(),async (req,res)=>{
+    const result = await fashionCollection.find({}).toArray();
+    res.send(result)
+    }
+)
+app.get("/fashions/:id",cors(),async (req,res)=>{
+    var o_id = new ObjectId(req.params["id"]);
+    const result = await fashionCollection.find({_id:o_id}).toArray();
+    res.send(result[0])
+    }
+)
+app.post("/fashions",cors(),async(req,res)=>{
+    //put json Fashion into database
+    await fashionCollection.insertOne(req.body)
+    //send message to client(send all database to client)
+    res.send(req.body)
+})
 
-const saveUpload = (imageFile) => {
-  const safeName = `${Date.now()}_${imageFile.name}`.replace(/\s+/g, '_');
-  const targetPath = path.join(UPLOAD_DIR, safeName);
-  imageFile.mv(targetPath);
-  return safeName;
-};
+var cookieParser = require('cookie-parser');
+app.use(cookieParser());
 
-app.use(morgan('combined'));
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(
-  fileUpload({
-    limits: {
-      fileSize: 10000000,
-    },
-    abortOnLimit: true,
-  })
-);
+app.get("/create-cookie",cors(),(req,res)=>{
+    res.cookie("username","nguyenthihonghanh")
+    res.cookie("password","123456")
+    account={"username":"nguyenthihonghanh",
+    "password":"123456"}
+    res.cookie("account",account)
+    res.send("cookies are created")
+    //Expires after 360000 ms from the time it is set.
+    res.cookie("infor_limit1", 'I am limited Cookie - way 1', {expire: 360000 +
+    Date.now()});
+    res.cookie("infor_limit2", 'I am limited Cookie - way 2', {maxAge: 360000});
+})
 
-app.use(express.static('public'));
+app.get("/read-cookie",cors(),(req,res)=>{
+    //cookie is stored in client, so we use req
+    username=req.cookies.username
+    password=req.cookies.password
+    account=req.cookies.account
+    infor="username = "+username+"<br/>"
+    infor+="password = "+password+"<br/>"
+    infor+="account.username = "+account.username+"<br/>"
+    infor+="account.password = "+account.password+"<br/>"
+    res.send(infor)
+})
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
-});
+app.get("/clear-cookie",cors(),(req,res)=>{
+    res.clearCookie("account")
+    res.send("[account] Cookie is removed")
+})
 
-app.get('/image/:id', (req, res) => {
-  const id = req.params['id'];
-  res.sendFile(path.join(UPLOAD_DIR, id));
-});
-
-app.post('/upload', (req, res) => {
-  const image = req.files?.image;
-  if (!image) return res.status(400).send('No file uploaded.');
-  const fileName = saveUpload(image);
-  res.status(200).send(fileName);
-});
-
-app.get('/api/books', (req, res) => {
-  const books = readBooks();
-  res.json(books);
-});
-
-app.get('/api/books/:id', (req, res) => {
-  const id = toNumber(req.params.id, -1);
-  const books = readBooks();
-  const book = books.find((item) => item.id === id);
-  if (!book) {
-    return res.status(404).json({ message: 'Book not found.' });
-  }
-  res.json(book);
-});
-
-app.post('/api/books', (req, res) => {
-  const books = readBooks();
-  const nextId = books.length ? Math.max(...books.map((b) => b.id)) + 1 : 1;
-
-  const imageFile = req.files?.image || req.files?.imageFile;
-  const coverImage = imageFile ? saveUpload(imageFile) : req.body.coverImage;
-
-  const payload = normalizeBookPayload({
-    ...req.body,
-    coverImage,
-  });
-
-  const newBook = {
-    id: nextId,
-    ...payload,
-  };
-  books.push(newBook);
-  writeBooks(books);
-  res.status(201).json(newBook);
-});
-
-app.put('/api/books/:id', (req, res) => {
-  const id = toNumber(req.params.id, -1);
-  const books = readBooks();
-  const index = books.findIndex((item) => item.id === id);
-  if (index === -1) {
-    return res.status(404).json({ message: 'Book not found.' });
-  }
-
-  const imageFile = req.files?.image || req.files?.imageFile;
-  const coverImage = imageFile ? saveUpload(imageFile) : req.body.coverImage;
-
-  const updated = normalizeBookPayload(
+app.get("/read-cookie",cors(),(req,res)=>{
+    //cookie is stored in client, so we use req
+    username=req.cookies.username
+    password=req.cookies.password
+    account=req.cookies.account
+    infor="username = "+username+"<br/>"
+    infor+="password = "+password+"<br/>"
+    if(account!=null)
     {
-      ...req.body,
-      coverImage,
-    },
-    books[index]
-  );
-
-  books[index] = {
-    ...books[index],
-    ...updated,
-  };
-  writeBooks(books);
-  res.json(books[index]);
-});
-
-app.delete('/api/books/:id', (req, res) => {
-  const id = toNumber(req.params.id, -1);
-  const books = readBooks();
-  const index = books.findIndex((item) => item.id === id);
-  if (index === -1) {
-    return res.status(404).json({ message: 'Book not found.' });
-  }
-  const removed = books.splice(index, 1)[0];
-  writeBooks(books);
-  res.json({ message: 'Deleted', book: removed });
-});
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+        infor+="account.username = "+account.username+"<br/>"
+        infor+="account.password = "+account.password+"<br/>"
+    }
+    res.send(infor)
+})
