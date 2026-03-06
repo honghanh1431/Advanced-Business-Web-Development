@@ -1,0 +1,27 @@
+<p>cart works!</p>
+<h2>Shopping Cart</h2>
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Action</th>
+    </tr>
+    <tr *ngFor="let p of cart">
+        <td>{{p.name}}</td>
+        <td>{{p.price}}</td>
+        <td>
+            <input type="number"
+            [(ngModel)]="p.quantity">
+        </td>
+        <td>
+            <button (click)="update(p._id,p.quantity)">
+                Update
+            </button>
+            <button (click)="remove(p._id)">
+                Remove
+            </button>
+        </td>
+    </tr>
+</table>
+<a routerLink="/product">Continue shopping</a>

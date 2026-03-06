@@ -1,0 +1,10 @@
+<p>products works!</p>
+<h2>Product List</h2>
+<div *ngFor="let p of products" class="card">
+    <h3>{{p.name}}</h3>
+    <p>Price: {{p.price}}</p>
+    <button (click)="addToCart(p._id)">
+        ADD TO CART
+    </button>
+</div>
+<a routerLink="/cart">View Cart</a>
