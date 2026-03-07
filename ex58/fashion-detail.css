@@ -1,0 +1,360 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+:root {
+  --ivory:         #faf6f0;
+  --ivory-warm:    #f2ebe0;
+  --ivory-deep:    #e8ddd0;
+  --burgundy:      #8b1a2f;
+  --burgundy-mid:  #a82840;
+  --burgundy-light:#c94060;
+  --rouge:         #d94050;
+  --noir:          #0f0a0a;
+  --noir-soft:     #1e1414;
+  --charcoal:      #2e2020;
+  --blush:         #f0d5d0;
+  --blush-deep:    #e0b8b0;
+  --gold:          #b89060;
+  --gold-light:    #d4ae80;
+  --shadow-r:      rgba(139, 26, 47, 0.14);
+  --shadow-n:      rgba(15, 10, 10, 0.10);
+}
+
+/* root */
+app-fashion-detail {
+  display: block;
+  min-height: 100vh;
+  background-color: var(--ivory);
+  background-image:
+    radial-gradient(ellipse 70% 55% at 5% 5%, rgba(139,26,47,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 50% at 95% 95%, rgba(139,26,47,0.05) 0%, transparent 50%);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--noir);
+  padding: 0;
+}
+
+app-fashion-detail::before {
+  content: 'MAISON';
+  display: block;
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.55em;
+  color: var(--gold);
+  background: var(--noir);
+  padding: 10px 0;
+}
+
+app-fashion-detail > div {
+  max-width: 780px;
+  margin: 52px auto 72px;
+  background: #fff;
+  box-shadow: 0 2px 4px var(--shadow-n), 0 24px 64px var(--shadow-r);
+  padding: 0;
+  animation: fadeUp 0.4s ease both;
+  border-top: 3px solid var(--burgundy);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+app-fashion-detail h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--noir);
+  margin: 0;
+  padding: 36px 48px 28px;
+  border-bottom: 1px solid var(--ivory-deep);
+  letter-spacing: 0.02em;
+  position: relative;
+}
+
+app-fashion-detail h2::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 48px;
+  width: 56px;
+  height: 2px;
+  background: var(--burgundy);
+}
+
+app-fashion-detail > div > *:not(h2) {
+  padding-left: 48px;
+  padding-right: 48px;
+}
+
+app-fashion-detail p {
+  display: flex;
+  gap: 12px;
+  margin: 0;
+  padding: 20px 48px;
+  font-size: 0.92rem;
+  color: var(--charcoal);
+  border-bottom: 1px solid var(--ivory-warm);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+app-fashion-detail p strong {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--burgundy);
+  min-width: 72px;
+  padding-top: 3px;
+}
+
+app-fashion-detail [innerHTML] {
+  background: var(--ivory-warm);
+  padding: 24px 32px;
+  margin: 0 48px 24px;
+  font-size: 0.92rem;
+  line-height: 1.85;
+  color: var(--charcoal);
+  border-left: 2px solid var(--blush-deep);
+}
+
+app-fashion-detail > div > img {
+  display: block;
+  width: 260px;
+  height: 320px;
+  object-fit: cover;
+  margin: 8px 48px 32px;
+  box-shadow: 8px 8px 0 var(--blush), 0 16px 48px var(--shadow-r);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+app-fashion-detail > div > img:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 12px 12px 0 var(--blush-deep), 0 24px 56px var(--shadow-r);
+}
+
+app-fashion-detail > div > button {
+  display: inline-block;
+  margin: 0 48px 48px;
+  padding: 11px 32px;
+  background: transparent;
+  color: var(--burgundy);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border: 1px solid var(--burgundy);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 0;
+}
+
+app-fashion-detail > div > button:hover {
+  background: var(--burgundy);
+  color: var(--ivory);
+}
+
+app-fashion-detail form {
+  padding: 32px 48px 40px;
+}
+
+app-fashion-detail form > div {
+  margin-bottom: 28px;
+}
+
+app-fashion-detail label {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--burgundy);
+  margin-bottom: 10px;
+}
+
+app-fashion-detail input[type="text"] {
+  width: 100%;
+  padding: 13px 18px;
+  border: 1px solid var(--ivory-deep);
+  border-radius: 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--noir);
+  background: var(--ivory);
+  transition: border-color 0.2s ease, background 0.2s ease;
+  outline: none;
+  box-sizing: border-box;
+  font-weight: 400;
+}
+
+app-fashion-detail input[type="text"]:focus {
+  border-color: var(--burgundy);
+  background: #fff;
+  box-shadow: inset 0 0 0 1px var(--blush);
+}
+
+app-fashion-detail input[type="file"] {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  color: var(--charcoal);
+  padding: 10px 0;
+  cursor: pointer;
+  font-weight: 300;
+}
+
+app-fashion-detail form img {
+  display: block;
+  width: 120px;
+  height: 140px;
+  object-fit: cover;
+  margin-top: 14px;
+  box-shadow: 4px 4px 0 var(--blush-deep);
+}
+
+app-fashion-detail hr {
+  border: none;
+  border-top: 1px solid var(--ivory-deep);
+  margin: 32px 0 28px;
+}
+
+app-fashion-detail button[type="submit"] {
+  padding: 14px 40px;
+  background: var(--burgundy);
+  color: var(--ivory);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: 1px solid var(--burgundy);
+  border-radius: 0;
+  cursor: pointer;
+  margin-right: 14px;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.25s ease, transform 0.15s ease;
+  box-shadow: 0 6px 24px var(--shadow-r);
+}
+
+app-fashion-detail button[type="submit"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--burgundy-light);
+  transform: translateX(-101%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+app-fashion-detail button[type="submit"]:hover:not(:disabled)::before {
+  transform: translateX(0);
+}
+
+app-fashion-detail button[type="submit"] span,
+app-fashion-detail button[type="submit"] {
+  position: relative;
+  z-index: 1;
+}
+
+app-fashion-detail button[type="submit"]:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+app-fashion-detail button[type="submit"]:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+app-fashion-detail button[type="button"] {
+  padding: 14px 32px;
+  background: transparent;
+  color: var(--charcoal);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border: 1px solid var(--ivory-deep);
+  border-radius: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+app-fashion-detail button[type="button"]:hover {
+  border-color: var(--charcoal);
+  background: var(--ivory-warm);
+}
+
+app-fashion-detail .error {
+  margin: 0 48px 32px;
+  background: var(--blush);
+  border-left: 3px solid var(--rouge);
+  color: var(--burgundy);
+  padding: 14px 20px;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+app-fashion-detail .angular-editor-toolbar {
+  background: var(--ivory-warm) !important;
+  border-color: var(--ivory-deep) !important;
+  border-radius: 0 !important;
+  padding: 8px !important;
+}
+
+app-fashion-detail .angular-editor-toolbar-set .angular-editor-button {
+  color: var(--charcoal) !important;
+  border-color: transparent !important;
+  border-radius: 2px !important;
+  transition: background 0.15s ease !important;
+}
+
+app-fashion-detail .angular-editor-toolbar-set .angular-editor-button:hover {
+  background: var(--blush) !important;
+  color: var(--burgundy) !important;
+}
+
+app-fashion-detail .angular-editor-textarea {
+  background: var(--ivory) !important;
+  border-color: var(--ivory-deep) !important;
+  border-radius: 0 !important;
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: 1rem !important;
+  font-style: italic !important;
+  color: var(--noir) !important;
+  min-height: 180px;
+  line-height: 1.8;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--ivory); }
+::-webkit-scrollbar-thumb { background: var(--blush-deep); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--burgundy); }
+
+@media (max-width: 640px) {
+  app-fashion-detail > div {
+    margin: 24px 16px 48px;
+  }
+  app-fashion-detail h2 { padding: 28px 24px 20px; font-size: 1.6rem; }
+  app-fashion-detail h2::after { left: 24px; }
+  app-fashion-detail p { padding: 16px 24px; }
+  app-fashion-detail form { padding: 24px 24px 32px; }
+  app-fashion-detail .error { margin: 0 24px 24px; }
+  app-fashion-detail > div > img { margin: 8px 24px 24px; }
+  app-fashion-detail > div > button { margin: 0 24px 32px; }
+
+  app-fashion-detail button[type="submit"],
+  app-fashion-detail button[type="button"] {
+    display: block;
+    width: 100%;
+    margin: 0 0 10px;
+    text-align: center;
+  }
+}

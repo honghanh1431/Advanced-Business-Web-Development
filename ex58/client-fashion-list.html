@@ -1,0 +1,92 @@
+<div class="fashion-container">
+
+  <div class="hero-section">
+    <div class="hero-overlay"></div>
+    <span class="hero-badge">CHERIE COLLECTION</span>
+    <h1 class="hero-title">FASHION SHOWCASE</h1>
+  </div>
+
+  <div class="filter-section">
+    <div class="filter-content">
+      <label for="styleSelect" class="filter-label">Lọc theo Style:</label>
+      <select 
+        id="styleSelect" 
+        [(ngModel)]="selectedStyle" 
+        (change)="onStyleChange()" 
+        class="style-dropdown">
+        <option value="">Tất cả Style</option>
+        <option *ngFor="let style of styles" [value]="style">{{ style }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <div class="fashions-wrapper">
+    <ng-container *ngIf="selectedStyle === ''; else filtered">
+      <div *ngFor="let style of styles" class="style-group">
+        <div *ngIf="fashionsByStyle[style] && fashionsByStyle[style].length > 0" class="style-section">
+          <h2 class="style-title">{{ style }}</h2>
+          
+          <div class="fashion-grid">
+            <div *ngFor="let fashion of fashionsByStyle[style]" 
+                 class="fashion-card"
+                 (click)="viewDetail(fashion._id)">
+              <div class="avatar-container">
+                <img 
+                  [src]="getThumbnailSrc(fashion.thumbnail)" 
+                  [alt]="fashion.fashion_title"
+                  class="avatar-image">
+              </div>
+              <div class="fashion-info">
+                <h3 class="fashion-title">{{ fashion.fashion_title }}</h3>
+                <p class="fashion-style">{{ fashion.style }}</p>
+              </div>
+              <div class="card-overlay">
+                <span class="view-label">Xem Chi Tiết</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #filtered>
+      <div class="style-section">
+        <h2 class="style-title">{{ selectedStyle }}</h2>
+        
+        <div *ngIf="filteredFashions.length > 0; else noResults" class="fashion-grid">
+          <div *ngFor="let fashion of filteredFashions" 
+               class="fashion-card"
+               (click)="viewDetail(fashion._id)">
+            
+            <div class="avatar-container">
+              <img 
+                [src]="getThumbnailSrc(fashion.thumbnail)" 
+                [alt]="fashion.fashion_title"
+                class="avatar-image">
+            </div>
+
+            <div class="fashion-info">
+              <h3 class="fashion-title">{{ fashion.fashion_title }}</h3>
+              <p class="fashion-style">{{ fashion.style }}</p>
+            </div>
+
+            <div class="card-overlay">
+              <span class="view-label">Xem Chi Tiết</span>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #noResults>
+          <div class="no-results">
+            <p>Không có Fashion cho style này</p>
+          </div>
+        </ng-template>
+      </div>
+    </ng-template>
+  </div>
+
+</div>

@@ -1,0 +1,38 @@
+<div *ngIf="isViewMode && fashion">
+  <h2>Chi tiết Fashion</h2>
+  <p><strong>Style:</strong> {{fashion.style}}</p>
+  <p><strong>Tiêu đề:</strong> {{fashion.fashion_title}}</p>
+  <p><strong>Chi tiết:</strong></p>
+  <div [innerHTML]="fashion.fashion_details"></div>
+  <p><strong>Ảnh:</strong></p>
+  <img [src]="getThumbnailSrc()" width="300">
+  <br><button (click)="cancel()">Quay lại</button>
+</div>
+
+<div *ngIf="isEditMode">
+  <h2>{{ fashion ? 'Sửa Fashion' : 'Thêm Fashion' }}</h2>
+  <form [formGroup]="fashionForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label>Style:</label><br>
+      <input type="text" formControlName="style" size="50">
+    </div>
+    <div>
+      <label>Tiêu đề:</label><br>
+      <input type="text" formControlName="fashion_title" size="50">
+    </div>
+    <div>
+      <label>Chi tiết (HTML):</label><br>
+      <angular-editor formControlName="fashion_details" [config]="editorConfig"></angular-editor>
+    </div>
+    <div>
+      <label>Ảnh thumbnail:</label><br>
+      <input type="file" (change)="onFileChange($event)" accept="image/*">
+      <br>
+      <img *ngIf="getThumbnailSrc()" [src]="getThumbnailSrc()" width="100" style="margin-top:10px;">
+    </div>
+    <hr>
+    <button type="submit" [disabled]="fashionForm.invalid">Lưu</button>
+    <button type="button" (click)="cancel()">Hủy</button>
+  </form>
+  <div *ngIf="errorMessage" class="error">{{errorMessage}}</div>
+</div>

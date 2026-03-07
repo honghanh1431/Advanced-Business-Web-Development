@@ -1,0 +1,64 @@
+<div *ngIf="loading" class="loading-container">
+  <div class="spinner"></div>
+  <p>Đang tải...</p>
+</div>
+
+<div *ngIf="!loading && fashion" class="fashion-container">
+  <div class="detail-hero">
+    <img 
+      [src]="getThumbnailSrc()" 
+      [alt]="fashion.fashion_title"
+      class="hero-image">
+    <div class="hero-overlay"></div>
+    <span class="hero-badge">{{ fashion.style }}</span>
+    <h1 class="hero-title">{{ fashion.fashion_title }}</h1>
+  </div>
+
+  <div class="detail-content">
+    <div class="meta-panel">
+      <div class="meta-section">
+        <h3 class="meta-heading">Style</h3>
+        <p class="meta-value">{{ fashion.style }}</p>
+      </div>
+
+      <div class="meta-divider"></div>
+
+      <div class="meta-section">
+        <h3 class="meta-heading">Tiêu Đề</h3>
+        <p class="meta-value">{{ fashion.fashion_title }}</p>
+      </div>
+
+      <div class="meta-divider"></div>
+
+      <div class="meta-section">
+        <h3 class="meta-heading">Ngày Tạo</h3>
+        <p class="meta-value">
+          {{ fashion.creation_date ? (fashion.creation_date | date:'dd/MM/yyyy') : 'N/A' }}
+        </p>
+      </div>
+    </div>
+
+    <div class="details-panel">
+      <h2 class="details-heading">Chi Tiết</h2>
+      <div class="fashion-details-content" [innerHTML]="fashion.fashion_details"></div>
+    </div>
+  </div>
+
+  <div class="action-section">
+    <button class="btn-back" (click)="goBack()">
+      <span class="back-arrow">←</span>
+      Quay Lại
+    </button>
+  </div>
+</div>
+
+<div *ngIf="!loading && errorMessage" class="error-container">
+  <div class="error-content">
+    <h2>Lỗi</h2>
+    <p>{{ errorMessage }}</p>
+    <button class="btn-back" (click)="goBack()">
+      <span class="back-arrow">←</span>
+      Quay Lại
+    </button>
+  </div>
+</div>
